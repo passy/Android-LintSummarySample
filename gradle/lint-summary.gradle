@@ -26,7 +26,6 @@ afterEvaluate {
 
 class LintSummaryTask extends DefaultTask implements BuildListenerAdapter {
     def stdout = new ByteArrayOutputStream()
-    def didExec = false
 
     @SuppressWarnings("GroovyUnusedDeclaration")
     @TaskAction
@@ -36,14 +35,13 @@ class LintSummaryTask extends DefaultTask implements BuildListenerAdapter {
             commandLine "android-lint-summary", "-v"
             standardOutput = stdout
         }
-        didExec = true
     }
 
     @Override
     void buildFinished(BuildResult result) {
         println stdout.toString()
 
-        if (!didExec) {
+        if (state.skipped) {
             println """
 For prettier display of lint errors, install `android-lint-summary`.
 
