@@ -1,0 +1,30 @@
+task lintSummary(type: LintSummaryTask) {
+    description "Print a summary of your lint issues"
+    group JavaBasePlugin.VERIFICATION_GROUP
+
+    outputs.upToDateWhen { false }
+    // onlyIf { gradle.startParameter.colorOutput }
+}
+
+task wat << {
+    println "*** LAST ***"
+}
+
+afterEvaluate {
+    tasks.withType(tasks['lint'].class) {
+        finalizedBy lintSummary
+    }
+
+    tasks.build.finalizedBy wat
+}
+
+class LintSummaryTask extends DefaultTask {
+    @SuppressWarnings("GroovyUnusedDeclaration")
+    @TaskAction
+    public def action() {
+        println "*** Running LintSummaryTask ***"
+        project.exec {
+            commandLine "android-lint-summary", "-v"
+        }
+    }
+}

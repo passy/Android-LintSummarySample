@@ -1,8 +1,9 @@
 apply plugin: 'com.android.application'
+apply from: '../gradle/lint-summary.gradle'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "23.0.0 rc2"
+    buildToolsVersion "23.0.0 rc3"
 
     defaultConfig {
         applicationId "lintsample.rdrei.net.lintsample"
