@@ -21,7 +21,7 @@ afterEvaluate {
         finalizedBy lintSummary
     }
 
-    gradle.addBuildListener(lintSummary)
+    gradle.addBuildListener lintSummary
 }
 
 class LintSummaryTask extends DefaultTask implements BuildListenerAdapter {
@@ -31,7 +31,6 @@ class LintSummaryTask extends DefaultTask implements BuildListenerAdapter {
     @TaskAction
     public def action() {
         project.exec {
-            def outputStream = new ByteArrayOutputStream()
             commandLine "android-lint-summary", "-v"
             standardOutput = stdout
         }
