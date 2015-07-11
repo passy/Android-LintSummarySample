@@ -1,10 +1,22 @@
-task lintSummary(type: LintSummaryTask) {
+def EXECUTABLE_NAME = "android-lint-summary"
+
+task hasLintSummaryExecutable(type: Exec) {
+    commandLine "which", "android-lint-summary"
+    ignoreExitValue true
+
+    ext.hasExecutable = {
+        execResult?.getExitValue() == 0
+    }
+}
+
+task lintSummary(type: LintSummaryTask, dependsOn: hasLintSummaryExecutable) {
     description "Print a summary of your lint issues"
     group JavaBasePlugin.VERIFICATION_GROUP
 
     outputs.upToDateWhen { false }
-    onlyIf { gradle.startParameter.colorOutput }
+    onlyIf { gradle.startParameter.colorOutput && hasLintSummaryExecutable.hasExecutable() }
 }
+
 
 afterEvaluate {
     tasks.withType(tasks['lint'].class) {
@@ -16,6 +28,7 @@ afterEvaluate {
 
 class LintSummaryTask extends DefaultTask implements BuildListenerAdapter {
     def stdout = new ByteArrayOutputStream()
+    def didExec = false
 
     @SuppressWarnings("GroovyUnusedDeclaration")
     @TaskAction
@@ -25,11 +38,23 @@ class LintSummaryTask extends DefaultTask implements BuildListenerAdapter {
             commandLine "android-lint-summary", "-v"
             standardOutput = stdout
         }
+        didExec = true
     }
 
     @Override
     void buildFinished(BuildResult result) {
         println stdout.toString()
+
+        if (!didExec) {
+            println """
+For prettier display of lint errors, install `android-lint-summary`.
+
+echo "/home/phartig/tools/android-lint-summary" >> ~/.tools
+synd-dottools.sh
+
+Learn more at go/als.
+            """.stripMargin()
+        }
     }
 }
 
