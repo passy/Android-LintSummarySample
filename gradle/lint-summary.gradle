@@ -1,5 +1,3 @@
-def EXECUTABLE_NAME = "android-lint-summary"
-
 task hasLintSummaryExecutable(type: Exec) {
     commandLine "which", "android-lint-summary"
     ignoreExitValue true
