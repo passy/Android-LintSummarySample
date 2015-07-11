@@ -16,15 +16,53 @@ afterEvaluate {
     }
 
     tasks.build.finalizedBy wat
+    gradle.addBuildListener(lintSummary)
 }
 
-class LintSummaryTask extends DefaultTask {
+class LintSummaryTask extends DefaultTask implements BuildListenerAdapter {
+    def stdout = new ByteArrayOutputStream()
+
     @SuppressWarnings("GroovyUnusedDeclaration")
     @TaskAction
     public def action() {
         println "*** Running LintSummaryTask ***"
         project.exec {
+            def outputStream = new ByteArrayOutputStream()
             commandLine "android-lint-summary", "-v"
+            standardOutput = stdout
         }
+    }
+
+    @Override
+    void buildFinished(BuildResult result) {
+        println "***OUTPUT***"
+        println stdout.toString()
+    }
+}
+
+trait BuildListenerAdapter implements BuildListener {
+    @Override
+    void buildFinished(BuildResult result) {
+
+    }
+
+    @Override
+    void buildStarted(Gradle gradle) {
+
+    }
+
+    @Override
+    void projectsEvaluated(Gradle gradle) {
+
+    }
+
+    @Override
+    void projectsLoaded(Gradle gradle) {
+
+    }
+
+    @Override
+    void settingsEvaluated(Settings settings) {
+
     }
 }
