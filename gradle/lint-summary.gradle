@@ -1,3 +1,14 @@
+/**
+ * To use this gradle script, apply it from the project you want to use it for,
+ * e.g.
+ *
+ * apply from: '../path/to/lint-summary.gradle'
+ *
+ * Invocations to any linting tasks will subsequently call to
+ * `android-lint-summary` and display the output of it at the end of the full
+ * build.
+ */
+
 task hasLintSummaryExecutable(type: Exec) {
     commandLine "which", "android-lint-summary"
     ignoreExitValue true
