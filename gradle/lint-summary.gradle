@@ -54,9 +54,9 @@ class LintSummaryTask extends DefaultTask implements BuildListenerAdapter {
 For prettier display of lint errors, install `android-lint-summary`.
 
 echo "/home/phartig/tools/android-lint-summary" >> ~/.tools
-synd-dottools.sh
+sync-dottools.sh
 
-Learn more at go/als.
+Learn more at go/android-lint-summary.
             """.stripMargin()
         }
     }
